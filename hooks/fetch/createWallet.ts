@@ -4,13 +4,15 @@ import {EthService} from "../../service";
 
 export default function createWallet() {
     const [etherWallet, setEtherWallet] = React.useState({
+        address:'',
+        mnemonic: '',
         privateKey: ''
     });
 
-    const [hi, setHi] = React.useState(false)
+    const [create, setCreate] = React.useState(false)
 
     const createNewWallet = () => {
-        setHi(!hi)
+        setCreate(!create)
     }
 
     React.useEffect(() => {
@@ -18,7 +20,7 @@ export default function createWallet() {
                 setEtherWallet(obj)
             }
         )
-    }, [hi])
+    }, [create])
 
 
     return {
