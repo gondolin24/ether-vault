@@ -14,9 +14,10 @@ interface WalletCart {
     address: string,
     mnemonic: string,
     privateKey: string,
-    walletName: string
-}
+    walletName: string,
+    deleteWallet: (address: string) => void
 
+}
 
 function wordToSecret(word = '') {
     return word.toString().split('').map((char) => '*').join('')
@@ -84,12 +85,13 @@ export default function WalletCart(props: WalletCart) {
                     copyToClipboard(WalletProp.MK)
                 }}
                 description={`${props.mnemonic.split(' ')
-                    .map((word)=>wordToSecret(word)).join(' ')}`}
+                    .map((word) => wordToSecret(word)).join(' ')}`}
                 right={props => <List.Icon {...props} icon="content-copy"/>}
             />
             <List.Item
                 title="Delete Wallet"
                 onPress={() => {
+                    props.deleteWallet(props.address)
                 }}
                 right={props => <List.Icon {...props} icon="delete"/>}
             />

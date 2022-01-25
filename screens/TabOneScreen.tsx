@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {useState} from 'react';
 import {FlatList, StyleSheet} from 'react-native';
-import {Button, HelperText, Modal, Portal, TextInput} from 'react-native-paper';
+import {Button, Modal, TextInput} from 'react-native-paper';
 import {Text, View} from '../components/Themed';
 import {RootTabScreenProps} from '../types';
 import createWallet from "../hooks/fetch/createWallet";
@@ -12,13 +12,15 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
     const [items, setItems] = useState<any>([])
 
     const {etherWallet, createNewWallet} = createWallet()
-
+    const deleteWallet = (address: string) => {
+        setItems([...items.filter((wallet: any) => address !== wallet.address)])
+    }
 
     const renderItem = (value: any) => {
         const {item} = value
         return (
             <WalletCart address={item.address} mnemonic={item.mnemonic} privateKey={item.privateKey}
-                        walletName={item.walletName}/>
+                        walletName={item.walletName} deleteWallet={deleteWallet}/>
         );
     }
     const containerStyle = {backgroundColor: 'white', padding: 20};
@@ -63,7 +65,6 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                         setItems([...items])
                         hideModal()
                         createNewWallet()
-
                     }}
                 >
                     CREATE
