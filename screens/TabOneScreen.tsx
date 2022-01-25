@@ -1,67 +1,85 @@
 import * as React from 'react';
-import {Button, FlatList, ScrollView, StyleSheet} from 'react-native';
-
-import EditScreenInfo from '../components/EditScreenInfo';
+import {useState} from 'react';
+import {FlatList, StyleSheet} from 'react-native';
+import {Button, HelperText, Modal, Portal, TextInput} from 'react-native-paper';
 import {Text, View} from '../components/Themed';
 import {RootTabScreenProps} from '../types';
-import getEtherBalance from "../hooks/fetch/getEtherBalance";
 import createWallet from "../hooks/fetch/createWallet";
-import * as Clipboard from 'expo-clipboard';
 import WalletCart from "../components/vault/WalletCard";
 
 export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>) {
 
+    const [items, setItems] = useState<any>([])
+
     const {etherWallet, createNewWallet} = createWallet()
 
-    const items = Array(10).map(()=>{
-        return Math.random().toString()
-    })
 
-    const copyToClipboard = () => {
-        Clipboard.setString('hello world');
-    };
+    const renderItem = (value: any) => {
+        const {item} = value
+        return (
+            <WalletCart address={item.address} mnemonic={item.mnemonic} privateKey={item.privateKey}
+                        walletName={item.walletName}/>
+        );
+    }
+    const containerStyle = {backgroundColor: 'white', padding: 20};
 
+    const [visible, setVisible] = React.useState(false);
+    const [createToggle, setCreateToggle] = React.useState(true)
+    const [walletName, setWalletName] = React.useState('');
+    const onChangeText = (text: any) => {
+        setWalletName(text);
+        if (text.length === 0 || text.length > 20) {
+            setCreateToggle(true)
+        } else {
+            setCreateToggle(false)
+        }
+    }
 
-    const renderItem = ({item}) => (
-        <WalletCart/>
-    );
+    const showModal = () => setVisible(true);
+    const hideModal = () => setVisible(false);
     return (
         <View style={styles.container}>
+
             <Text style={styles.title}>{'Wallets'}</Text>
 
-            <FlatList style={styles.one} data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]} renderItem={renderItem}/>
+            <FlatList style={styles.one} data={items} renderItem={renderItem}/>
 
             <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)"/>
             {/*<EditScreenInfo path="/screens/TabOneScreen.tsx"/>*/}
-            <Button
-                onPress={() => {
-                    createNewWallet()
-                }}
-                title="Learn More"
-                color="#841584"
-                accessibilityLabel="Learn more about this purple button"
-            />
+            <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+                <TextInput
+                    mode="outlined"
+                    label="Wallet Name"
+                    placeholder="Wallet Name"
+                    onChangeText={onChangeText}
+                    right={<TextInput.Affix text="/20"/>}
+                />
+                <Button
+                    disabled={createToggle}
 
-            <Button
-                onPress={() => {
-                }}
-                title="Create New Wallet"
-                color="#efefef"
-                accessibilityLabel="Learn more about this purple button"
-            />
-            <Button
-                onPress={copyToClipboard}
-                title="Copy to Clipboard"
-                color="red"
-                accessibilityLabel="Learn more about this purple button"
-            />
-            <Button
-                onPress={copyToClipboard}
-                title="Copy to Clipboard"
-                color="red"
-                accessibilityLabel="Learn more about this purple button"
-            />
+                    mode='outlined'
+                    onPress={() => {
+                        items.push({...etherWallet, walletName})
+                        setItems([...items])
+                        hideModal()
+                        createNewWallet()
 
+                    }}
+                >
+                    CREATE
+                </Button>
+            </Modal>
+            <Button
+                mode='outlined'
+                onPress={() => {
+                    showModal()
+                }}
+                style={styles.modelButton}
+            >
+                Create Wallet
+            </Button>
+
+            <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)"/>
 
         </View>
     );
@@ -74,8 +92,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     title: {
+        marginTop: '10px',
         fontSize: 20,
-        fontWeight: 'bold',
+        marginBottom: '10px'
     },
     separator: {
         marginVertical: 30,
@@ -84,5 +103,8 @@ const styles = StyleSheet.create({
     },
     one: {
         width: '80%',
+    },
+    modelButton: {
+        marginTop: '10px'
     },
 });

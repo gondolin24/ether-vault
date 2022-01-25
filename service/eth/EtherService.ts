@@ -5,15 +5,10 @@ export class EtherService {
 
     async createWalletAndKey() {
         const wallet = await ethers.Wallet.createRandom()
-        // return {
-        //     address: await wallet.address,
-        //     mnemonic: wallet.mnemonic.phrase,
-        //     privateKey: await wallet.privateKey
-        // }
         return {
-            address:'121212',
-            mnemonic: '2323',
-            privateKey: Math.random().toString()
+            address: await wallet.address,
+            mnemonic: wallet.mnemonic.phrase,
+            privateKey: await wallet.privateKey
         }
     }
 

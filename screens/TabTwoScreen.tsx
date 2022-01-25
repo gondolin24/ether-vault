@@ -1,32 +1,47 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
+import {Text, View} from '../components/Themed';
+import {Card, Paragraph, Title} from "react-native-paper";
 
 export default function TabTwoScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
-    </View>
-  );
+    return (
+        <View style={styles.container}>
+          <div>
+                      <Title>Initial Release</Title>
+                      <ul>
+                          <li>Ability to create a wallet</li>
+                          <li>Ability to delete a wallet</li>
+                          <li>export address and keys</li>
+                          <li>Secure everything runs on your device</li>
+                      </ul>
+          </div>
+            <div>
+                        <Title>Upcoming features</Title>
+                        <ul>
+                            <li>See wallet transactions</li>
+                            <li>Transfer ETH to another wallet</li>
+
+                        </ul>
+            </div>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
+    container: {
+        flex: 1,
+        alignItems: 'flex-start'
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+    card: {
+    },
+    separator: {
+        marginVertical: 30,
+        height: 1,
+        width: '80%',
+    },
 });

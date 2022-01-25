@@ -10,53 +10,60 @@ enum WalletProp {
     MK = 'MK'
 }
 
-export default function WalletCart({}) {
+interface WalletCart {
+    address: string,
+    mnemonic: string,
+    privateKey: string,
+    walletName: string
+}
+
+
+function wordToSecret(word = '') {
+    return word.toString().split('').map((char) => '*').join('')
+}
+
+export default function WalletCart(props: WalletCart) {
     // get data from provider
 
-    const etherWallet = {
-        address: '',
-        mnemonic: '',
-        privateKey: ''
-    }
     const etherBalance = getEtherBalance({
-        address: '0xaC3D2f9b4B63cb34E257BBf10EABB6D7BCCce08F'
+        address: props.address
     });
 
     const copyToClipboard = (walletProperty: WalletProp) => {
         switch (walletProperty) {
             case 'PK': {
-                Clipboard.setString(etherWallet.privateKey);
+                Clipboard.setString(props.privateKey);
                 break
             }
             case 'WA': {
-                Clipboard.setString(etherWallet.address);
+                Clipboard.setString(props.address);
                 break
             }
             case 'MK': {
-                Clipboard.setString(etherWallet.mnemonic);
+
+                Clipboard.setString(props.mnemonic);
                 break
             }
             default: {
-                Clipboard.setString(etherWallet.address);
+                Clipboard.setString(props.address);
             }
         }
 
-        Clipboard.setString(etherWallet.privateKey);
     };
 
     return (
         <List.Accordion
             style={styles.listItem}
-            title={`Wallet ${etherBalance}`}
+            title={props.walletName}
             left={props => <List.Icon {...props} icon="bank"/>}>
             <List.Item
                 title="Balance"
-                description={`${Math.random()} - ETH`}
+                description={`${etherBalance}`}
                 right={props => <List.Icon {...props} icon="ethereum"/>}
             />
             <List.Item
                 title="Address"
-                description={`${Math.random()}${Math.random()}`}
+                description={`${props.address}`}
                 onPress={() => {
                     copyToClipboard(WalletProp.WA)
                 }}
@@ -65,7 +72,7 @@ export default function WalletCart({}) {
 
             <List.Item
                 title="Private Key"
-                description={`${Math.random()} - ETH`}
+                description={`${wordToSecret(props.privateKey)}`}
                 onPress={() => {
                     copyToClipboard(WalletProp.PK)
                 }}
@@ -76,7 +83,8 @@ export default function WalletCart({}) {
                 onPress={() => {
                     copyToClipboard(WalletProp.MK)
                 }}
-                description={`***** *** **** ****`}
+                description={`${props.mnemonic.split(' ')
+                    .map((word)=>wordToSecret(word)).join(' ')}`}
                 right={props => <List.Icon {...props} icon="content-copy"/>}
             />
             <List.Item
