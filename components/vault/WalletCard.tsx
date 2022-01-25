@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {Avatar, Button, Card, Title, Paragraph, TextInput} from 'react-native-paper';
 import {List} from 'react-native-paper';
 import {StyleSheet} from "react-native";
 import * as Clipboard from "expo-clipboard";
+import getEtherBalance from "../../hooks/fetch/getEtherBalance";
 
 enum WalletProp {
     PK = 'PK',
@@ -11,11 +11,16 @@ enum WalletProp {
 }
 
 export default function WalletCart({}) {
+    // get data from provider
+
     const etherWallet = {
         address: '',
         mnemonic: '',
         privateKey: ''
     }
+    const etherBalance = getEtherBalance({
+        address: '0xaC3D2f9b4B63cb34E257BBf10EABB6D7BCCce08F'
+    });
 
     const copyToClipboard = (walletProperty: WalletProp) => {
         switch (walletProperty) {
@@ -33,7 +38,6 @@ export default function WalletCart({}) {
             }
             default: {
                 Clipboard.setString(etherWallet.address);
-
             }
         }
 
@@ -43,7 +47,7 @@ export default function WalletCart({}) {
     return (
         <List.Accordion
             style={styles.listItem}
-            title={`Wallet ${Math.random().toFixed(3)}`}
+            title={`Wallet ${etherBalance}`}
             left={props => <List.Icon {...props} icon="bank"/>}>
             <List.Item
                 title="Balance"
@@ -72,8 +76,14 @@ export default function WalletCart({}) {
                 onPress={() => {
                     copyToClipboard(WalletProp.MK)
                 }}
-                description={`${Math.random()} - ETH`}
+                description={`***** *** **** ****`}
                 right={props => <List.Icon {...props} icon="content-copy"/>}
+            />
+            <List.Item
+                title="Delete Wallet"
+                onPress={() => {
+                }}
+                right={props => <List.Icon {...props} icon="delete"/>}
             />
         </List.Accordion>
     );

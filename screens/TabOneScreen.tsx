@@ -10,7 +10,7 @@ import * as Clipboard from 'expo-clipboard';
 import WalletCart from "../components/vault/WalletCard";
 
 export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>) {
-    const etherBalance = getEtherBalance();
+
     const {etherWallet, createNewWallet} = createWallet()
 
     const items = Array(10).map(()=>{

@@ -28,9 +28,13 @@ export class EtherService {
         return await provider.getHistory('0xaC3D2f9b4B63cb34E257BBf10EABB6D7BCCce08F')
     }
 
-    async getBalance() {
+    /**
+     *
+     * @param {String} address
+     */
+    async getBalance(address) {
         let provider = new ethers.providers.EtherscanProvider("ropsten");
-        const balance = await provider.getBalance('0xaC3D2f9b4B63cb34E257BBf10EABB6D7BCCce08F');
+        const balance = await provider.getBalance(address);
         return ethers.utils.formatEther(balance)
     }
 
