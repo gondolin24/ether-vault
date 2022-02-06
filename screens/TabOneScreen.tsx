@@ -1,11 +1,13 @@
 import * as React from 'react';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {FlatList, StyleSheet} from 'react-native';
 import {Button, Modal, TextInput} from 'react-native-paper';
 import {Text, View} from '../components/Themed';
 import {RootTabScreenProps} from '../types';
 import createWallet from "../hooks/fetch/createWallet";
 import WalletCart from "../components/vault/WalletCard";
+import {DataStorage} from "../service/store";
+import loadAppState from "../hooks/fetch/loadAppState";
 
 export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>) {
 
@@ -14,7 +16,19 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
     const {etherWallet, createNewWallet} = createWallet()
     const deleteWallet = (address: string) => {
         setItems([...items.filter((wallet: any) => address !== wallet.address)])
+        DataStorage.updateWallets(items)
+            .then().catch((e) => {
+            console.log(e)
+        })
     }
+    const wallets = loadAppState()
+
+    useEffect(() => {
+        console.log('here')
+
+        console.log(wallets)
+        setItems((wallets || []))
+    }, [])
 
     const renderItem = (value: any) => {
         const {item} = value
@@ -61,24 +75,35 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
 
                     mode='outlined'
                     onPress={() => {
-                        items.push({...etherWallet, walletName})
-                        setItems([...items])
-                        hideModal()
+
+
+                        const newItems = [...items, {...etherWallet, walletName}]
+                        setItems(newItems)
+                        DataStorage.updateWallets(items)
+                            .then(() => {
+                                hideModal()
+                            }).catch((e) => {
+                            hideModal()
+                        })
                         createNewWallet()
                     }}
                 >
                     CREATE
                 </Button>
             </Modal>
-            <Button
-                mode='outlined'
-                onPress={() => {
-                    showModal()
-                }}
-                style={styles.modelButton}
-            >
-                Create Wallet
-            </Button>
+            {
+                (!visible) &&
+                <Button
+                    mode='outlined'
+                    onPress={() => {
+                        showModal()
+                    }}
+                    style={styles.modelButton}
+                >
+                    Create Wallet
+                </Button>
+            }
+
 
             <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)"/>
 
@@ -93,9 +118,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     title: {
-        marginTop: '10px',
+        marginTop: 10,
         fontSize: 20,
-        marginBottom: '10px'
+        marginBottom: 10
     },
     separator: {
         marginVertical: 30,
@@ -106,6 +131,6 @@ const styles = StyleSheet.create({
         width: '80%',
     },
     modelButton: {
-        marginTop: '10px'
+        marginTop: 10
     },
 });

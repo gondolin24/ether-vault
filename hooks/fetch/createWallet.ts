@@ -19,7 +19,9 @@ export default function createWallet() {
         EthService.createWalletAndKey().then((obj) => {
                 setEtherWallet(obj)
             }
-        )
+        ).catch((e)=>{
+            console.log(e)
+        })
     }, [create])
 
 

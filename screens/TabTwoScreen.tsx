@@ -1,29 +1,25 @@
 import * as React from 'react';
 import {StyleSheet} from 'react-native';
 
-import {View} from '../components/Themed';
-import {Title} from "react-native-paper";
+import {Text, View} from '../components/Themed';
 
 export default function TabTwoScreen() {
     return (
         <View style={styles.container}>
-            <div>
-                <Title>Initial Release</Title>
-                <ul>
-                    <li>Ability to create a wallet</li>
-                    <li>Ability to delete a wallet</li>
-                    <li>export address and keys</li>
-                    <li>Secure everything runs on your device</li>
-                </ul>
-            </div>
-            <div>
-                <Title>Upcoming features</Title>
-                <ul>
-                    <li>See wallet transactions</li>
-                    <li>Transfer ETH to another wallet</li>
 
-                </ul>
-            </div>
+            <Text style={styles.title}>Initial Release</Text>
+            <Text>Ability to create a wallet</Text>
+            <Text>Ability to delete a wallet</Text>
+            <Text>export address and keys</Text>
+            <Text>Secure everything runs on your device</Text>
+
+            <Text style={styles.title}>Export Features</Text>
+            <Text>Able to export wallet to meta mask using secrets</Text>
+            <Text>PLEASE PLEASE save your secrets</Text>
+            <Text style={styles.title}>Upcoming features</Text>
+            <Text>See wallet transactions</Text>
+            <Text>Import Wallets</Text>
+            <Text>Transfer ETH to another wallet</Text>
         </View>
     );
 }
@@ -31,13 +27,16 @@ export default function TabTwoScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
+        padding: 16
     },
     title: {
         fontSize: 20,
         fontWeight: 'bold',
     },
-    card: {},
+    card: {
+        marginLeft: 10
+    },
     separator: {
         marginVertical: 30,
         height: 1,

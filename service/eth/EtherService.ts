@@ -1,4 +1,6 @@
-const ethers = require('ethers')
+import 'react-native-get-random-values'
+import "@ethersproject/shims"
+import {ethers } from "ethers"
 
 export class EtherService {
 
@@ -27,7 +29,7 @@ export class EtherService {
      *
      * @param {String} address
      */
-    async getBalance(address) {
+    async getBalance(address: string) {
         let provider = new ethers.providers.EtherscanProvider("ropsten");
         const balance = await provider.getBalance(address);
         return ethers.utils.formatEther(balance)
